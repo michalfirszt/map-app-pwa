@@ -1,0 +1,12 @@
+{
+  "parser": "@typescript-eslint/parser",
+  "extends": ["prettier", "plugin:@typescript-eslint/recommended"],
+  "plugins": ["@typescript-eslint", "prettier", "import", "simple-import-sort", "unused-imports"],
+  "rules": {
+    "curly": "error",
+    "prettier/prettier": "error",
+    "sort-imports": "off",
+    "import/order": "off",
+    "simple-import-sort/imports": "error"
+  }
+}
