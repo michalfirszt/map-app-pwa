@@ -2,6 +2,7 @@ import { makeStyles } from '@material-ui/core';
 import { RouteComponentProps } from '@reach/router';
 import React from 'react';
 
+import MainMap from '../../components/MainMap';
 import Sidebar from '../../components/Sidebar';
 
 const useStyles = makeStyles(() => ({
@@ -18,7 +19,9 @@ const MapView = (props: RouteComponentProps) => {
   return (
     <div className={classes.root}>
       <Sidebar />
-      <main className={classes.content}></main>
+      <main className={classes.content}>
+        <MainMap />
+      </main>
     </div>
   );
 };

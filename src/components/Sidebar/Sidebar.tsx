@@ -10,6 +10,7 @@ const drawerWidth = 240;
 
 const useStyle = makeStyles((theme) => ({
   drawer: {
+    position: 'absolute',
     width: drawerWidth,
     flexShrink: 0,
     whiteSpace: 'nowrap',
@@ -44,7 +45,7 @@ const useStyle = makeStyles((theme) => ({
 const Sidebar = () => {
   const classes = useStyle();
 
-  const [isDraverOpen, setIsDraverOpen] = useState(true);
+  const [isDraverOpen, setIsDraverOpen] = useState<boolean>(true);
   return (
     <Drawer
       className={clsx(classes.drawer, {
