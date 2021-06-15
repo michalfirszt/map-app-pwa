@@ -4,12 +4,16 @@ import * as L from 'leaflet';
 import { useEffect, useRef, useState } from 'react';
 
 interface UseMapProps {
-  mapContainerRef: React.RefObject<HTMLDivElement> | null;
+  latitude: number;
+  longitude: number;
+  zoom: number;
 }
 
-export function useMap(): UseMapProps {
+export function useMap(props: UseMapProps): React.RefObject<HTMLDivElement> {
   const [wasMapRendered, setWasMapRendered] = useState<boolean>(false);
   const mapContainerRef = useRef<HTMLDivElement>(null);
+
+  const { latitude, longitude, zoom } = props;
 
   useEffect(() => {
     if (mapContainerRef.current === null) {
@@ -22,13 +26,7 @@ export function useMap(): UseMapProps {
 
     const mainMap = L.map(mapContainerRef.current, {
       zoomControl: false,
-    }).setView(
-      [
-        Number(process.env.REACT_APP_MAIN_MAP_LAT),
-        Number(process.env.REACT_APP_MAIN_MAP_LNG),
-      ],
-      Number(process.env.REACT_APP_MAIN_MAP_ZOOM)
-    );
+    }).setView([latitude, longitude], zoom);
 
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
       attribution:
@@ -42,7 +40,7 @@ export function useMap(): UseMapProps {
       .addTo(mainMap);
 
     setWasMapRendered(true);
-  }, []);
+  }, [mapContainerRef.current]);
 
-  return { mapContainerRef };
+  return mapContainerRef;
 }

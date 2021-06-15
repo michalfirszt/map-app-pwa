@@ -15,10 +15,16 @@ const useStyles = makeStyles(() => ({
   },
 }));
 
-const MainMap = () => {
+const mapConfig = {
+  latitude: Number(process.env.REACT_APP_MAIN_MAP_LAT),
+  longitude: Number(process.env.REACT_APP_MAIN_MAP_LNG),
+  zoom: Number(process.env.REACT_APP_MAIN_MAP_ZOOM),
+};
+
+const MainMap = (): JSX.Element => {
   const classes = useStyles();
 
-  const { mapContainerRef } = useMap();
+  const mapContainerRef = useMap(mapConfig);
 
   return (
     <div className={classes.mapContainer}>
