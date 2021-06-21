@@ -2,21 +2,24 @@ import { Divider, Drawer, IconButton, makeStyles } from '@material-ui/core';
 import {
   ChevronLeft as ChevronLeftIcon,
   ChevronRight as ChevronRightIcon,
+  Search as SearchIcon,
 } from '@material-ui/icons';
 import clsx from 'clsx';
 import React, { useState } from 'react';
+
+import SearchInput from '../SearchInput';
 
 const drawerWidth = 240;
 
 const useStyle = makeStyles((theme) => ({
   drawer: {
     position: 'absolute',
-    width: drawerWidth,
+    minWidth: drawerWidth,
     flexShrink: 0,
     whiteSpace: 'nowrap',
   },
   drawerOpen: {
-    width: drawerWidth,
+    minWidth: drawerWidth,
     transition: theme.transitions.create('width', {
       easing: theme.transitions.easing.sharp,
       duration: theme.transitions.duration.enteringScreen,
@@ -61,6 +64,7 @@ const Sidebar = () => {
       }}
     >
       <div className={classes.drawerHeader}>
+        {isDraverOpen ? <SearchInput /> : <SearchIcon />}
         <IconButton onClick={() => setIsDraverOpen(!isDraverOpen)}>
           {isDraverOpen ? <ChevronLeftIcon /> : <ChevronRightIcon />}
         </IconButton>

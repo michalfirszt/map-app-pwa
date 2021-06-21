@@ -1,7 +1,7 @@
 import 'leaflet/dist/leaflet.css';
 
 import * as L from 'leaflet';
-import { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 
 interface UseMapProps {
   latitude: number;
@@ -24,20 +24,20 @@ export function useMap(props: UseMapProps): React.RefObject<HTMLDivElement> {
       return;
     }
 
-    const mainMap = L.map(mapContainerRef.current, {
+    const map = L.map(mapContainerRef.current, {
       zoomControl: false,
     }).setView([latitude, longitude], zoom);
 
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
       attribution:
         '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
-    }).addTo(mainMap);
+    }).addTo(map);
 
     L.control
       .zoom({
         position: 'topright',
       })
-      .addTo(mainMap);
+      .addTo(map);
 
     setWasMapRendered(true);
   }, [mapContainerRef.current]);

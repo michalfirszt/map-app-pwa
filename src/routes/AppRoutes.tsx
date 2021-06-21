@@ -1,12 +1,16 @@
-import { Router } from '@reach/router';
 import React, { memo } from 'react';
+import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 
 import MapView from '../views/MapView';
 
 const AppRoutes = memo(() => {
   return (
     <Router>
-      <MapView path="/" />
+      <Switch>
+        <Route path="/">
+          <MapView />
+        </Route>
+      </Switch>
     </Router>
   );
 });
