@@ -64,11 +64,7 @@ const Sidebar = () => {
       }}
     >
       <div className={classes.drawerHeader}>
-        {isDraverOpen ? (
-          <SearchInput />
-        ) : (
-          <SearchIcon />
-        )}
+        {isDraverOpen ? <SearchInput /> : <SearchIcon />}
         <IconButton onClick={() => setIsDraverOpen(!isDraverOpen)}>
           {isDraverOpen ? <ChevronLeftIcon /> : <ChevronRightIcon />}
         </IconButton>

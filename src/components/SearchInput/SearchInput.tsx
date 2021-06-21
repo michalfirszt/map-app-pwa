@@ -7,6 +7,9 @@ import {
 } from '@material-ui/core/styles';
 import { Search as SearchIcon } from '@material-ui/icons';
 import React, { useCallback } from 'react';
+import { useTranslation } from 'react-i18next';
+
+import { tKeys } from '../../constants';
 
 type Props = {
   onSearch?: () => void;
@@ -52,6 +55,7 @@ const useStyle = makeStyles((theme: Theme) =>
 
 const SearchInput = ({ onSearch }: Props) => {
   const classes = useStyle();
+  const { t } = useTranslation();
 
   const handleOnSearch = useCallback(() => {
     onSearch?.();
@@ -60,7 +64,7 @@ const SearchInput = ({ onSearch }: Props) => {
   return (
     <div className={classes.search}>
       <InputBase
-        placeholder="Search…"
+        placeholder={t(tKeys.SEARCH)}
         classes={{
           root: classes.inputRoot,
           input: classes.inputInput,

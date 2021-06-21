@@ -1,5 +1,4 @@
 import { makeStyles } from '@material-ui/core';
-import { RouteComponentProps } from '@reach/router';
 import React from 'react';
 
 import MainMap from '../../components/MainMap';
@@ -14,7 +13,7 @@ const useStyles = makeStyles(() => ({
   },
 }));
 
-const MapView = (props: RouteComponentProps) => {
+const MapView = () => {
   const classes = useStyles();
   return (
     <div className={classes.root}>
