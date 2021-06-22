@@ -4,7 +4,7 @@ import {
   ChevronRight as ChevronRightIcon,
   Search as SearchIcon,
 } from '@material-ui/icons';
-import clsx from 'clsx';
+import classNames from 'classnames';
 import React, { useState } from 'react';
 
 import SearchInput from '../SearchInput';
@@ -51,13 +51,13 @@ const Sidebar = () => {
   const [isDraverOpen, setIsDraverOpen] = useState<boolean>(true);
   return (
     <Drawer
-      className={clsx(classes.drawer, {
+      className={classNames(classes.drawer, {
         [classes.drawerOpen]: isDraverOpen,
         [classes.drawerClose]: !isDraverOpen,
       })}
       variant="permanent"
       classes={{
-        paper: clsx({
+        paper: classNames({
           [classes.drawerOpen]: isDraverOpen,
           [classes.drawerClose]: !isDraverOpen,
         }),
