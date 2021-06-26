@@ -1,8 +1,10 @@
 import { makeStyles } from '@material-ui/core';
-import React from 'react';
+import React, { useEffect } from 'react';
+import { useDispatch } from 'react-redux';
 
 import MainMap from '../../components/MainMap';
 import Sidebar from '../../components/Sidebar';
+import { loadEventList } from '../../store/events';
 
 const useStyles = makeStyles(() => ({
   root: {
@@ -15,6 +17,12 @@ const useStyles = makeStyles(() => ({
 
 const MapView = () => {
   const classes = useStyles();
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    dispatch(loadEventList());
+  }, []);
+
   return (
     <div className={classes.root}>
       <Sidebar />
