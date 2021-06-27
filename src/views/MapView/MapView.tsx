@@ -1,10 +1,12 @@
-import { makeStyles } from '@material-ui/core';
+import { CircularProgress, makeStyles } from '@material-ui/core';
 import React, { useEffect } from 'react';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 
 import MainMap from '../../components/MainMap';
 import Sidebar from '../../components/Sidebar';
+import { loadStatuses } from '../../constants';
 import { loadEventList } from '../../store/events';
+import { getLoadEventListStatus } from '../../store/events/selectors';
 
 const useStyles = makeStyles(() => ({
   root: {
@@ -15,9 +17,13 @@ const useStyles = makeStyles(() => ({
   },
 }));
 
+const { LOAD_SUCCESS } = loadStatuses;
+
 const MapView = () => {
   const classes = useStyles();
   const dispatch = useDispatch();
+
+  const loadEventListStatus = useSelector(getLoadEventListStatus);
 
   useEffect(() => {
     dispatch(loadEventList());
@@ -27,7 +33,11 @@ const MapView = () => {
     <div className={classes.root}>
       <Sidebar />
       <main className={classes.content}>
-        <MainMap />
+        {loadEventListStatus === LOAD_SUCCESS ? (
+          <MainMap />
+        ) : (
+          <CircularProgress />
+        )}
       </main>
     </div>
   );

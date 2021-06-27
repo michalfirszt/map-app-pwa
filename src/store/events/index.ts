@@ -2,28 +2,9 @@ import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import axios from 'axios';
 
 import { loadStatuses } from '../../constants';
+import { EventsState } from './types';
 
-type Event = {
-  id: number;
-  name: string;
-  slug: string;
-  latitude: number;
-  longitude: number;
-  description: string;
-  active: boolean;
-};
-
-type State = {
-  events: { [key: number]: Event };
-  effects: {
-    loadEventListEffect: {
-      status: string;
-      error: null | string;
-    };
-  };
-};
-
-const initialState: State = {
+const initialState: EventsState = {
   events: {},
   effects: {
     loadEventListEffect: {
@@ -50,12 +31,7 @@ const eventSlice = createSlice({
   reducers: {},
   extraReducers: (builder) => {
     builder.addCase(loadEventList.fulfilled, (state, action) => {
-      state.events = action.payload.reduce(
-        (list: { [key: number]: Event }, event: Event) => (
-          (list[event.id] = event), list
-        ),
-        {}
-      );
+      state.events = action.payload;
       state.effects.loadEventListEffect.status = loadStatuses.LOAD_SUCCESS;
     });
   },
