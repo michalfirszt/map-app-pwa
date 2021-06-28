@@ -2,6 +2,7 @@ import { CircularProgress, makeStyles } from '@material-ui/core';
 import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
+import FullSizeBackground from '../../components/FullSizeBackground';
 import MainMap from '../../components/MainMap';
 import Sidebar from '../../components/Sidebar';
 import { loadStatuses } from '../../constants';
@@ -36,7 +37,9 @@ const MapView = () => {
         {loadEventListStatus === LOAD_SUCCESS ? (
           <MainMap />
         ) : (
-          <CircularProgress />
+          <FullSizeBackground color="grey">
+            <CircularProgress />
+          </FullSizeBackground>
         )}
       </main>
     </div>
