@@ -1,5 +1,5 @@
 import { CssBaseline, ThemeProvider } from '@material-ui/core';
-import React from 'react';
+import React, { ReactElement } from 'react';
 import { I18nextProvider } from 'react-i18next';
 import { Provider } from 'react-redux';
 
@@ -8,7 +8,7 @@ import AppRoutes from './routes';
 import createStore from './store';
 import { lightTheme } from './theme';
 
-const App = () => {
+const App = (): ReactElement => {
   return (
     <Provider store={createStore()}>
       <ThemeProvider theme={lightTheme}>

@@ -26,6 +26,7 @@ const MainMap = (): JSX.Element => {
     longitude: Number(process.env.REACT_APP_MAIN_MAP_LNG),
     zoom: Number(process.env.REACT_APP_MAIN_MAP_ZOOM),
     events,
+    groupMarkers: true,
   });
 
   return (

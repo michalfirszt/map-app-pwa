@@ -1,16 +1,20 @@
 import 'leaflet/dist/leaflet.css';
+import 'leaflet.markercluster/dist/MarkerCluster.css';
+require('leaflet.markercluster');
 
 import * as L from 'leaflet';
 import { values } from 'lodash';
 import React, { useEffect, useRef, useState } from 'react';
 
 import { EventsData } from '../../store/events/types';
+import { blueIcon } from './icons';
 
 interface UseMapProps {
   latitude: number;
   longitude: number;
   zoom: number;
   events?: EventsData;
+  groupMarkers?: boolean;
   onClickMap?: (lat: number, lng: number) => void;
 }
 
@@ -19,6 +23,7 @@ export function useMap({
   longitude,
   zoom,
   events,
+  groupMarkers = false,
   onClickMap,
 }: UseMapProps): React.RefObject<HTMLDivElement> {
   const [wasMapRendered, setWasMapRendered] = useState<boolean>(false);
@@ -48,12 +53,20 @@ export function useMap({
       })
       .addTo(map);
 
-    if (events) {
-      values(events).forEach((event) => {
-        if (event.active) {
-          L.marker([event.latitude, event.longitude]).addTo(map);
-        }
-      });
+    const markers = values(events).map((event) =>
+      L.marker([event.latitude, event.longitude], {
+        icon: blueIcon,
+      })
+    );
+
+    if (groupMarkers) {
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-ignore
+      const markerCluster = L.markerClusterGroup();
+      markerCluster.addLayers(markers);
+      map.addLayer(markerCluster);
+    } else {
+      markers.forEach((marker) => marker.addTo(map));
     }
 
     map.on('click', (event) => {
