@@ -1,6 +1,8 @@
 import { makeStyles } from '@material-ui/core';
+import { useSelector } from 'react-redux';
 
 import { useMap } from '../../hooks';
+import { getEvents } from '../../store/events/selectors';
 
 const useStyles = makeStyles(() => ({
   map: {
@@ -15,16 +17,17 @@ const useStyles = makeStyles(() => ({
   },
 }));
 
-const mapConfig = {
-  latitude: Number(process.env.REACT_APP_MAIN_MAP_LAT),
-  longitude: Number(process.env.REACT_APP_MAIN_MAP_LNG),
-  zoom: Number(process.env.REACT_APP_MAIN_MAP_ZOOM),
-};
-
 const MainMap = (): JSX.Element => {
   const classes = useStyles();
+  const events = useSelector(getEvents);
 
-  const mapContainerRef = useMap(mapConfig);
+  const mapContainerRef = useMap({
+    latitude: Number(process.env.REACT_APP_MAIN_MAP_LAT),
+    longitude: Number(process.env.REACT_APP_MAIN_MAP_LNG),
+    zoom: Number(process.env.REACT_APP_MAIN_MAP_ZOOM),
+    events,
+    groupMarkers: true,
+  });
 
   return (
     <div className={classes.mapContainer}>
