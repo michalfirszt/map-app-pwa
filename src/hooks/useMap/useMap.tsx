@@ -6,17 +6,8 @@ import * as L from 'leaflet';
 import { values } from 'lodash';
 import React, { useEffect, useRef, useState } from 'react';
 
-import { EventsData } from '../../store/events/types';
 import { blueIcon } from './icons';
-
-interface UseMapProps {
-  latitude: number;
-  longitude: number;
-  zoom: number;
-  events?: EventsData;
-  groupMarkers?: boolean;
-  onClickMap?: (lat: number, lng: number) => void;
-}
+import { UseMapProps } from './types';
 
 export function useMap({
   latitude,
@@ -72,8 +63,8 @@ export function useMap({
     map.on('click', (event) => {
       // eslint-disable-next-line @typescript-eslint/ban-ts-comment
       // @ts-ignore
-      const { lat, lng } = event.latlng;
-      onClickMap?.(lat, lng);
+      const { latlng } = event;
+      onClickMap?.(map, latlng);
     });
 
     setWasMapRendered(true);
