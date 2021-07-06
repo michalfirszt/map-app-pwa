@@ -5,14 +5,14 @@ import {
   Theme,
 } from '@material-ui/core/styles';
 import clsx from 'clsx';
-import React, { ReactNode } from 'react';
+import React, { ReactElement, ReactNode } from 'react';
 
 type Props = {
   color: 'white' | 'grey';
   children: ReactNode;
 };
 
-const useStyle = makeStyles((theme: Theme) =>
+const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     fullScreen: {
       display: 'flex',
@@ -30,8 +30,8 @@ const useStyle = makeStyles((theme: Theme) =>
   })
 );
 
-const FullSizeBackground = ({ color, children }: Props) => {
-  const classes = useStyle();
+const FullSizeBackground = ({ color, children }: Props): ReactElement => {
+  const classes = useStyles();
 
   return (
     <div

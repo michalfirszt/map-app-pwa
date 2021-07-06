@@ -6,12 +6,13 @@ import {
   Theme,
 } from '@material-ui/core/styles';
 import { Search as SearchIcon } from '@material-ui/icons';
-import React, { ChangeEvent, useCallback, useState } from 'react';
+import React, { ChangeEvent, ReactElement, useCallback, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { tKeys } from '../../constants';
 
 type Props = {
+  disabled?: boolean;
   defaultValue?: string;
   onSearch?: () => void;
 };
@@ -54,7 +55,11 @@ const useStyle = makeStyles((theme: Theme) =>
   })
 );
 
-const SearchInput = ({ defaultValue = '', onSearch }: Props) => {
+const SearchInput = ({
+  disabled = false,
+  defaultValue = '',
+  onSearch,
+}: Props): ReactElement => {
   const classes = useStyle();
   const { t } = useTranslation();
 
@@ -77,6 +82,7 @@ const SearchInput = ({ defaultValue = '', onSearch }: Props) => {
         value={inputValue}
         placeholder={t(tKeys.SEARCH)}
         onChange={handleInputChange}
+        disabled={disabled}
         classes={{
           root: classes.inputRoot,
           input: classes.inputInput,
@@ -87,6 +93,7 @@ const SearchInput = ({ defaultValue = '', onSearch }: Props) => {
         type="submit"
         className={classes.iconButton}
         onClick={handleOnSearch}
+        disabled={disabled}
         aria-label="search"
       >
         <SearchIcon />

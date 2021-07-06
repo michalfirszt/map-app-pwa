@@ -1,5 +1,5 @@
 import { CircularProgress, makeStyles } from '@material-ui/core';
-import React, { useEffect } from 'react';
+import React, { ReactElement, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
 import FullSizeBackground from '../../components/FullSizeBackground';
@@ -20,7 +20,7 @@ const useStyles = makeStyles(() => ({
 
 const { LOAD_SUCCESS } = loadStatuses;
 
-const MapView = () => {
+const MapView = (): ReactElement => {
   const classes = useStyles();
   const dispatch = useDispatch();
 
@@ -32,7 +32,7 @@ const MapView = () => {
 
   return (
     <div className={classes.root}>
-      <Sidebar />
+      <Sidebar searchDisabled={false} />
       <main className={classes.content}>
         {loadEventListStatus === LOAD_SUCCESS ? (
           <MainMap />

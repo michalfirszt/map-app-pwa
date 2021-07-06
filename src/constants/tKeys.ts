@@ -1,3 +1,10 @@
 export const tKeys = {
+  CANCEL: 'CANCEL',
+  CREATE_EVENT: 'CREATE_EVENT',
+  DESCRIPTION: 'DESCRIPTION',
+  LOCATION: 'LOCATION',
+  MAP: 'MAP',
+  NAME: 'NAME',
+  SAVE: 'SAVE',
   SEARCH: 'SEARCH',
 };
