@@ -7,6 +7,7 @@ import {
 } from '@material-ui/icons';
 import classNames from 'classnames';
 import React, { ReactElement, useState } from 'react';
+import { useWindowSize } from 'react-use';
 
 import SearchInput from '../SearchInput';
 import SidebarList from './SidebarList';
@@ -55,8 +56,9 @@ const useStyle = makeStyles((theme) =>
 
 const Sidebar = ({ searchDisabled = true }: Props): ReactElement => {
   const classes = useStyle();
+  const { width } = useWindowSize();
 
-  const [isDraverOpen, setIsDraverOpen] = useState<boolean>(true);
+  const [isDraverOpen, setIsDraverOpen] = useState<boolean>(width > 700);
   return (
     <Drawer
       className={classNames(classes.drawer, {
