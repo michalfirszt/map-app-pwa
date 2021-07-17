@@ -1,14 +1,22 @@
-import { Divider, Drawer, IconButton } from '@material-ui/core';
+import {
+  BottomNavigation,
+  BottomNavigationAction,
+  Divider,
+  Drawer,
+  IconButton,
+} from '@material-ui/core';
 import { createStyles, makeStyles } from '@material-ui/core/styles';
 import {
   ChevronLeft as ChevronLeftIcon,
   ChevronRight as ChevronRightIcon,
+  Person as PersonIcon,
   Search as SearchIcon,
 } from '@material-ui/icons';
 import classNames from 'classnames';
-import React, { ReactElement, useState } from 'react';
+import React, { ReactElement, useContext, useState } from 'react';
 import { useWindowSize } from 'react-use';
 
+import AppContext from '../../contexts/AppContext';
 import SearchInput from '../SearchInput';
 import SidebarList from './SidebarList';
 
@@ -57,6 +65,9 @@ const useStyle = makeStyles((theme) =>
 const Sidebar = ({ searchDisabled = true }: Props): ReactElement => {
   const classes = useStyle();
   const { width } = useWindowSize();
+  const {
+    userData: { username },
+  } = useContext<any>(AppContext);
 
   const [isDraverOpen, setIsDraverOpen] = useState<boolean>(width > 700);
   return (
@@ -85,6 +96,9 @@ const Sidebar = ({ searchDisabled = true }: Props): ReactElement => {
       </div>
       <Divider />
       <SidebarList />
+      <BottomNavigation>
+        <BottomNavigationAction label={username} icon={<PersonIcon />} />
+      </BottomNavigation>
     </Drawer>
   );
 };

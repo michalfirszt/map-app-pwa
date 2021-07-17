@@ -3,6 +3,7 @@ import React, { ReactElement } from 'react';
 import { I18nextProvider } from 'react-i18next';
 import { Provider } from 'react-redux';
 
+import { AppContextWrapper } from './contexts/AppContext';
 import i18n from './i18n';
 import AppRoutes from './routes';
 import createStore from './store';
@@ -13,9 +14,11 @@ const App = (): ReactElement => {
     <Provider store={createStore()}>
       <ThemeProvider theme={lightTheme}>
         <CssBaseline />
-        <I18nextProvider i18n={i18n}>
-          <AppRoutes />
-        </I18nextProvider>
+        <AppContextWrapper>
+          <I18nextProvider i18n={i18n}>
+            <AppRoutes />
+          </I18nextProvider>
+        </AppContextWrapper>
       </ThemeProvider>
     </Provider>
   );
