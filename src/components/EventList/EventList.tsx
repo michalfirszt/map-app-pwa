@@ -3,7 +3,9 @@ import { createStyles, makeStyles } from '@material-ui/core/styles';
 import { values } from 'lodash';
 import React, { ReactElement, useMemo } from 'react';
 import { useSelector } from 'react-redux';
+import { useHistory } from 'react-router-dom';
 
+import paths from '../../routes/paths';
 import { getEvents } from '../../store/events/selectors';
 
 const useStyles = makeStyles(() =>
@@ -18,13 +20,18 @@ const useStyles = makeStyles(() =>
 
 const EventList = (): ReactElement => {
   const classes = useStyles();
+  const history = useHistory();
+
   const events = useSelector(getEvents);
 
   const eventList: ReactElement = useMemo(
     () => (
       <List>
         {values(events).map((event) => (
-          <ListItem>
+          <ListItem
+            button
+            onClick={() => history.push(paths.eventPreview(event.id))}
+          >
             <ListItemText primary={event.name} />
           </ListItem>
         ))}
