@@ -1,18 +1,24 @@
 import { List, ListItem, ListItemIcon, ListItemText } from '@material-ui/core';
-import { Map as MapIcon, Room as RoomIcon } from '@material-ui/icons';
+import {
+  DateRange as DateRangeIcon,
+  Map as MapIcon,
+  Room as RoomIcon,
+} from '@material-ui/icons';
 import React, { ReactElement } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useHistory } from 'react-router-dom';
 
 import { tKeys } from '../../constants';
 import paths from '../../routes/paths';
+import DialogItem from '../DialogItem';
+import EventList from '../EventList';
 
 const SidebarList = (): ReactElement => {
   const history = useHistory();
   const { t } = useTranslation();
 
   return (
-    <List>
+    <List data-testid="sidebar-list">
       <ListItem
         button
         onClick={() => {
@@ -24,6 +30,14 @@ const SidebarList = (): ReactElement => {
         </ListItemIcon>
         <ListItemText primary={t(tKeys.MAP)} />
       </ListItem>
+      <DialogItem dialogContent={<EventList />}>
+        <ListItem button>
+          <ListItemIcon>
+            <DateRangeIcon />
+          </ListItemIcon>
+          <ListItemText primary={t(tKeys.EVENTS)} />
+        </ListItem>
+      </DialogItem>
       <ListItem
         button
         onClick={() => {

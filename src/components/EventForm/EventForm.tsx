@@ -10,11 +10,13 @@ import React, {
 } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useDispatch } from 'react-redux';
+import { useHistory } from 'react-router-dom';
 
 import { tKeys } from '../../constants';
 import { useMap } from '../../hooks';
 import { blueIcon } from '../../hooks/useMap/icons';
 import { Latlng } from '../../hooks/useMap/types';
+import paths from '../../routes/paths';
 import { createEvent } from '../../store/events';
 
 export type EventFormData = {
@@ -75,6 +77,7 @@ const useStyles = makeStyles(() =>
 
 const EventForm = ({ defaultValues }: Props): ReactElement => {
   const classes = useStyles();
+  const history = useHistory();
   const { t } = useTranslation();
   const dispatch = useDispatch();
 
@@ -100,6 +103,8 @@ const EventForm = ({ defaultValues }: Props): ReactElement => {
         dispatch(createEvent(state));
       },
     });
+
+    history.push(paths.root);
   }, []);
 
   const mapRef = useMap({
