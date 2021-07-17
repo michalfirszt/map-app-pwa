@@ -9,6 +9,15 @@ import React, {
   useReducer,
 } from 'react';
 import { useTranslation } from 'react-i18next';
+import { useDispatch } from 'react-redux';
+import { useHistory } from 'react-router-dom';
+
+import { tKeys } from '../../constants';
+import { useMap } from '../../hooks';
+import { blueIcon } from '../../hooks/useMap/icons';
+import { Latlng } from '../../hooks/useMap/types';
+import paths from '../../routes/paths';
+import { createEvent } from '../../store/events';
 
 export type EventFormData = {
   name: string;
@@ -20,11 +29,6 @@ export type EventFormData = {
 type Props = {
   defaultValues: EventFormData;
 };
-
-import { tKeys } from '../../constants';
-import { useMap } from '../../hooks';
-import { blueIcon } from '../../hooks/useMap/icons';
-import { Latlng } from '../../hooks/useMap/types';
 
 type Actions =
   | { type: 'setName'; payload: string }
@@ -73,9 +77,11 @@ const useStyles = makeStyles(() =>
 
 const EventForm = ({ defaultValues }: Props): ReactElement => {
   const classes = useStyles();
+  const history = useHistory();
   const { t } = useTranslation();
+  const dispatch = useDispatch();
 
-  const [formData, dispatch] = useReducer(reducer, defaultValues);
+  const [formData, dispatchEventAction] = useReducer(reducer, defaultValues);
   const { name, description } = formData;
 
   const handleOnClickMap = useCallback((map, latlng) => {
@@ -83,11 +89,22 @@ const EventForm = ({ defaultValues }: Props): ReactElement => {
       icon: blueIcon,
     }).addTo(map);
 
-    dispatch({ type: 'setLocation', payload: latlng });
+    dispatchEventAction({ type: 'setLocation', payload: latlng });
   }, []);
 
   const handleSubmit = useCallback((event: SyntheticEvent) => {
     event.preventDefault();
+
+    dispatchEventAction({
+      type: 'createEvent',
+      payload: (state) => {
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // @ts-ignore
+        dispatch(createEvent(state));
+      },
+    });
+
+    history.push(paths.root);
   }, []);
 
   const mapRef = useMap({
@@ -109,7 +126,10 @@ const EventForm = ({ defaultValues }: Props): ReactElement => {
           required
           fullWidth
           onChange={(event) =>
-            dispatch({ type: 'setName', payload: event.target.value })
+            dispatchEventAction({
+              type: 'setName',
+              payload: event.target.value,
+            })
           }
         />
       </div>
@@ -123,7 +143,7 @@ const EventForm = ({ defaultValues }: Props): ReactElement => {
           required
           fullWidth
           onChange={(event) =>
-            dispatch({
+            dispatchEventAction({
               type: 'setDescription',
               payload: event.target.value,
             })

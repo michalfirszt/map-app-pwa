@@ -1,7 +1,7 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import axios from 'axios';
 
-import { loadStatuses } from '../../constants';
+import { createStatuses, loadStatuses } from '../../constants';
 import { EventsState } from './types';
 
 const initialState: EventsState = {
@@ -9,6 +9,11 @@ const initialState: EventsState = {
   effects: {
     loadEventListEffect: {
       status: loadStatuses.NOT_LOADING,
+      error: null,
+    },
+    createEventEffect: {
+      eventId: null,
+      status: createStatuses.NOT_CREATING,
       error: null,
     },
   },
@@ -25,6 +30,20 @@ export const loadEventList = createAsyncThunk(
   }
 );
 
+export const createEvent = createAsyncThunk(
+  'events/createEvent',
+  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+  // @ts-ignore
+  async ({ name, description, latitude, longitude }) => {
+    const response = await axios.post(
+      `${process.env.REACT_APP_API_URL}/api/event/create`,
+      { name, description, latitude, longitude }
+    );
+
+    return response.data;
+  }
+);
+
 const eventSlice = createSlice({
   name: 'events',
   initialState,
@@ -33,6 +52,11 @@ const eventSlice = createSlice({
     builder.addCase(loadEventList.fulfilled, (state, action) => {
       state.events = action.payload;
       state.effects.loadEventListEffect.status = loadStatuses.LOAD_SUCCESS;
+    });
+
+    builder.addCase(createEvent.fulfilled, (state, action) => {
+      state.events[action.payload.id] = action.payload;
+      state.effects.createEventEffect.status = createStatuses.CREATION_SUCCESS;
     });
   },
 });
