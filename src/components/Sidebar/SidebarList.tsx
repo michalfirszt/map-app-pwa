@@ -22,7 +22,7 @@ const SidebarList = (): ReactElement => {
         <ListItemIcon>
           <MapIcon />
         </ListItemIcon>
-        <ListItemText primary={t(tKeys.CREATE_EVENT)} />
+        <ListItemText primary={t(tKeys.MAP)} />
       </ListItem>
       <ListItem
         button

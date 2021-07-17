@@ -15,6 +15,11 @@ export type EventEffects = {
     status: string;
     error: null | string;
   };
+  createEventEffect: {
+    eventId: null | number;
+    status: string;
+    error: null | string;
+  };
 };
 
 export type EventsState = {
