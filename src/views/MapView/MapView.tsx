@@ -1,6 +1,7 @@
 import { CircularProgress, makeStyles } from '@material-ui/core';
-import React, { ReactElement, useEffect } from 'react';
+import React, { ReactElement } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import { useMount } from 'react-use';
 
 import FullSizeBackground from '../../components/FullSizeBackground';
 import MainMap from '../../components/MainMap';
@@ -26,9 +27,9 @@ const MapView = (): ReactElement => {
 
   const loadEventListStatus = useSelector(getLoadEventListStatus);
 
-  useEffect(() => {
+  useMount(() => {
     dispatch(loadEventList());
-  }, []);
+  });
 
   return (
     <div className={classes.root}>

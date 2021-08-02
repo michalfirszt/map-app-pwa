@@ -1,9 +1,12 @@
 import { Container } from '@material-ui/core';
 import { createStyles, makeStyles } from '@material-ui/core/styles';
 import React, { ReactElement } from 'react';
+import { useTranslation } from 'react-i18next';
+import { useTitle } from 'react-use';
 
 import EventForm, { EventFormData } from '../../components/EventForm';
 import Sidebar from '../../components/Sidebar';
+import { tKeys } from '../../constants';
 
 const useStyles = makeStyles(() =>
   createStyles({
@@ -18,6 +21,7 @@ const useStyles = makeStyles(() =>
 
 const EventCreate = (): ReactElement => {
   const classes = useStyles();
+  const { t } = useTranslation();
 
   const initialFormState: EventFormData = {
     name: '',
@@ -25,6 +29,8 @@ const EventCreate = (): ReactElement => {
     latitude: null,
     longitude: null,
   };
+
+  useTitle(t(tKeys.CREATE_EVENT));
 
   return (
     <div className={classes.root}>
