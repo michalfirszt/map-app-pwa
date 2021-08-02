@@ -1,5 +1,5 @@
-import { createSelector } from '@reduxjs/toolkit';
 import { values } from 'lodash';
+import { createSelector } from 'reselect';
 
 import { State } from '../index';
 import { EventEffects, EventsData } from './types';
