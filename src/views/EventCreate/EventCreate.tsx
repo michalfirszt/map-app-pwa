@@ -1,10 +1,10 @@
 import { Container } from '@material-ui/core';
 import { createStyles, makeStyles } from '@material-ui/core/styles';
-import React, { ReactElement } from 'react';
+import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { useTitle } from 'react-use';
 
-import EventForm, { EventFormData } from '../../components/EventForm';
+import EventForm from '../../components/EventForm';
 import Sidebar from '../../components/Sidebar';
 import { tKeys } from '../../constants';
 
@@ -19,16 +19,9 @@ const useStyles = makeStyles(() =>
   })
 );
 
-const EventCreate = (): ReactElement => {
+const EventCreate = (): JSX.Element => {
   const classes = useStyles();
   const { t } = useTranslation();
-
-  const initialFormState: EventFormData = {
-    name: '',
-    description: '',
-    latitude: null,
-    longitude: null,
-  };
 
   useTitle(t(tKeys.CREATE_EVENT));
 
@@ -37,7 +30,7 @@ const EventCreate = (): ReactElement => {
       <Sidebar />
       <main className={classes.content}>
         <Container>
-          <EventForm defaultValues={initialFormState} />
+          <EventForm />
         </Container>
       </main>
     </div>

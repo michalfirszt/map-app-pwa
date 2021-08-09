@@ -34,7 +34,7 @@ export const createEvent = createAsyncThunk(
   'events/createEvent',
   // eslint-disable-next-line @typescript-eslint/ban-ts-comment
   // @ts-ignore
-  async ({ name, description, latitude, longitude }) => {
+  async ({ name, description, location: { latitude, longitude } }) => {
     const response = await axios.post(
       `${process.env.REACT_APP_API_URL}/api/event/create`,
       { name, description, latitude, longitude }
