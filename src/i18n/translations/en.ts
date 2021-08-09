@@ -8,6 +8,7 @@ export default {
     [tKeys.CANCEL]: 'Cancel',
     [tKeys.CITY]: 'City',
     [tKeys.CREATE_EVENT]: 'Create event',
+    [tKeys.DELETE]: 'Delete',
     [tKeys.DESCRIPTION]: 'Description',
     [tKeys.LOCATION]: 'Location',
     [tKeys.ERROR]: 'Error',
