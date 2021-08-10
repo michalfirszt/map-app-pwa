@@ -5,15 +5,11 @@ import * as L from 'leaflet';
 import React, { useCallback } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
-import { useDispatch } from 'react-redux';
-import { useHistory } from 'react-router-dom';
 import * as yup from 'yup';
 
 import { tKeys } from '../../constants';
 import { useMap } from '../../hooks';
 import { blueIcon } from '../../hooks/useMap/icons';
-import paths from '../../routes/paths';
-import { createEvent } from '../../store/events';
 
 export type EventFormData = {
   name: string;
@@ -26,6 +22,7 @@ export type EventFormData = {
 
 type Props = {
   defaultValues?: EventFormData;
+  onSubmit?: (formData: EventFormData) => void;
 };
 
 const useStyles = makeStyles(() =>
@@ -52,10 +49,8 @@ const validationSchema = yup.object().shape({
   }),
 });
 
-const EventForm = ({ defaultValues }: Props): JSX.Element => {
+const EventForm = ({ defaultValues, onSubmit }: Props): JSX.Element => {
   const classes = useStyles();
-  const history = useHistory();
-  const dispatch = useDispatch();
   const { t } = useTranslation();
 
   const {
@@ -74,12 +69,9 @@ const EventForm = ({ defaultValues }: Props): JSX.Element => {
 
   const handleFormSubmit: SubmitHandler<EventFormData> = useCallback(
     (formData) => {
-      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-      // @ts-ignore
-      dispatch(createEvent(formData));
-      history.push(paths.root);
+      onSubmit?.(formData);
     },
-    [createEvent, dispatch, history]
+    []
   );
 
   const handleOnClickMap = useCallback(

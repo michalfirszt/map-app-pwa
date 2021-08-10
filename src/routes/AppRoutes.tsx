@@ -3,6 +3,7 @@ import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 
 import Counters from '../views/Counters';
 import EventCreate from '../views/EventCreate';
+import EventEdit from '../views/EventEdit/EventEdit';
 import EventPreview from '../views/EventPreview';
 import MapView from '../views/MapView';
 import Register from '../views/Register/Register';
@@ -20,6 +21,9 @@ const AppRoutes = memo(() => {
         </Route>
         <Route path={paths.eventCreate}>
           <EventCreate />
+        </Route>
+        <Route path={paths.eventEdit()}>
+          <EventEdit />
         </Route>
         <Route path={paths.eventPreview()}>
           <EventPreview />

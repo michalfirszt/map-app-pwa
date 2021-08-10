@@ -3,6 +3,8 @@ const paths = {
   register: '/register',
   counters: '/counters',
   eventCreate: '/event/create',
+  eventEdit: (eventId: number | null = null): string =>
+    `/event/${eventId ?? ':eventId'}/edit`,
   eventPreview: (eventId: number | null = null): string =>
     `/event/${eventId ?? ':eventId'}`,
 };
