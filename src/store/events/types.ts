@@ -20,6 +20,10 @@ export type EventEffects = {
     status: string;
     error: null | string;
   };
+  deleteEventEffect: {
+    status: string;
+    error: null | string;
+  };
 };
 
 export type EventsState = {
