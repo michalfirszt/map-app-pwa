@@ -92,6 +92,14 @@ const EventForm = ({ defaultValues, onSubmit }: Props): JSX.Element => {
     latitude: Number(process.env.REACT_APP_MAIN_MAP_LAT),
     longitude: Number(process.env.REACT_APP_MAIN_MAP_LNG),
     zoom: Number(process.env.REACT_APP_MAIN_MAP_ZOOM),
+    markers: defaultValues
+      ? [
+          {
+            latitude: defaultValues.location.latitude,
+            longitude: defaultValues.location.longitude,
+          },
+        ]
+      : [],
     onClickMap: handleOnClickMap,
   });
 

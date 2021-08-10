@@ -1,4 +1,5 @@
 import { makeStyles } from '@material-ui/core';
+import { values } from 'lodash';
 import { useSelector } from 'react-redux';
 
 import { useMap } from '../../hooks';
@@ -25,8 +26,11 @@ const MainMap = (): JSX.Element => {
     latitude: Number(process.env.REACT_APP_MAIN_MAP_LAT),
     longitude: Number(process.env.REACT_APP_MAIN_MAP_LNG),
     zoom: Number(process.env.REACT_APP_MAIN_MAP_ZOOM),
-    events,
     groupMarkers: true,
+    markers: values(events).map((event) => ({
+      latitude: event.latitude,
+      longitude: event.longitude,
+    })),
   });
 
   return (
