@@ -1,15 +1,16 @@
 import { CircularProgress, Container } from '@material-ui/core';
 import { createStyles, makeStyles } from '@material-ui/core/styles';
-import React, { useEffect } from 'react';
+import React, { useCallback, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { useParams } from 'react-router-dom';
+import { useHistory, useParams } from 'react-router-dom';
 
 import EventForm, { EventFormData } from '../../components/EventForm';
 import FullSizeBackground from '../../components/FullSizeBackground';
 import Sidebar from '../../components/Sidebar';
 import { loadStatuses } from '../../constants';
+import paths from '../../routes/paths';
 import { State } from '../../store';
-import { loadEventList } from '../../store/events';
+import { loadEventList, updateEvent } from '../../store/events';
 import { getEvent, getLoadEventListStatus } from '../../store/events/selectors';
 
 type UrlParams = {
@@ -32,6 +33,7 @@ const { NOT_LOADING, LOAD_SUCCESS } = loadStatuses;
 const EventEdit = (): JSX.Element => {
   const classes = useStyles();
   const { eventId } = useParams<UrlParams>();
+  const history = useHistory();
   const dispatch = useDispatch();
 
   const loadEventListStatus = useSelector(getLoadEventListStatus);
@@ -46,6 +48,17 @@ const EventEdit = (): JSX.Element => {
     },
   };
 
+  const handleUpdateEvent = useCallback(
+    (formData: EventFormData) => {
+      dispatch(updateEvent({ eventId: Number(eventId), formData }));
+      history.push({
+        pathname: paths.root,
+        state: { updatedEventName: formData.name },
+      });
+    },
+    [dispatch, history]
+  );
+
   useEffect(() => {
     if (loadEventListStatus === NOT_LOADING) {
       dispatch(loadEventList());
@@ -58,7 +71,10 @@ const EventEdit = (): JSX.Element => {
       <main className={classes.content}>
         <Container>
           {loadEventListStatus === LOAD_SUCCESS ? (
-            <EventForm defaultValues={initialFormData} />
+            <EventForm
+              defaultValues={initialFormData}
+              onSubmit={handleUpdateEvent}
+            />
           ) : (
             <FullSizeBackground color="grey">
               <CircularProgress />

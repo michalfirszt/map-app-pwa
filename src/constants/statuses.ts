@@ -12,6 +12,13 @@ export const createStatuses = {
   CREATION_FAILED: 'CREATION_FAILED',
 };
 
+export const updateStatuses = {
+  UPDATING: 'UPDATING',
+  NOT_UPDATING: 'NOT_UPDATING',
+  UPDATE_SUCCESS: 'UPDATE_SUCCESS',
+  UPDATE_FAILED: 'UPDATE_FAILED',
+};
+
 export const deleteStatuses = {
   DELETING: 'CREATING',
   NOT_DELETING: 'NOT_CREATING',
