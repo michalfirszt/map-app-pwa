@@ -1,63 +1,28 @@
+import { yupResolver } from '@hookform/resolvers/yup';
 import { Button, FormLabel, TextField } from '@material-ui/core';
 import { createStyles, makeStyles } from '@material-ui/core/styles';
 import * as L from 'leaflet';
-import { includes } from 'lodash';
-import React, {
-  ReactElement,
-  SyntheticEvent,
-  useCallback,
-  useReducer,
-} from 'react';
+import React, { useCallback } from 'react';
+import { SubmitHandler, useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
-import { useDispatch } from 'react-redux';
-import { useHistory } from 'react-router-dom';
+import * as yup from 'yup';
 
 import { tKeys } from '../../constants';
 import { useMap } from '../../hooks';
 import { blueIcon } from '../../hooks/useMap/icons';
-import { Latlng } from '../../hooks/useMap/types';
-import paths from '../../routes/paths';
-import { createEvent } from '../../store/events';
 
 export type EventFormData = {
   name: string;
   description: string;
-  latitude: number | null;
-  longitude: number | null;
+  location: {
+    latitude: number;
+    longitude: number;
+  };
 };
 
 type Props = {
-  defaultValues: EventFormData;
-};
-
-type Actions =
-  | { type: 'setName'; payload: string }
-  | { type: 'setDescription'; payload: string }
-  | { type: 'setLocation'; payload: Latlng }
-  | { type: 'createEvent'; payload: (state: any) => void };
-
-const reducer = (state: any, { type, payload }: Actions) => {
-  switch (type) {
-    case 'setName': {
-      return { ...state, name: payload };
-    }
-    case 'setDescription': {
-      return { ...state, description: payload };
-    }
-    case 'setLocation': {
-      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-      // @ts-ignore
-      const { lat, lng } = payload;
-      return { ...state, latitude: lat, longitude: lng };
-    }
-    case 'createEvent': {
-      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-      // @ts-ignore
-      payload?.(state);
-
-      return state;
-    }
-  }
+  defaultValues?: EventFormData;
+  onSubmit?: (formData: EventFormData) => void;
 };
 
 const useStyles = makeStyles(() =>
@@ -75,62 +40,81 @@ const useStyles = makeStyles(() =>
   })
 );
 
-const EventForm = ({ defaultValues }: Props): ReactElement => {
+const validationSchema = yup.object().shape({
+  name: yup.string().required(),
+  description: yup.string().required(),
+  location: yup.object().shape({
+    latitude: yup.number().required(),
+    longitude: yup.number().required(),
+  }),
+});
+
+const EventForm = ({ defaultValues, onSubmit }: Props): JSX.Element => {
   const classes = useStyles();
-  const history = useHistory();
   const { t } = useTranslation();
-  const dispatch = useDispatch();
 
-  const [formData, dispatchEventAction] = useReducer(reducer, defaultValues);
-  const { name, description } = formData;
+  const {
+    register,
+    clearErrors,
+    setValue,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<EventFormData>({
+    defaultValues: defaultValues ?? {
+      name: '',
+      description: '',
+    },
+    resolver: yupResolver(validationSchema),
+  });
 
-  const handleOnClickMap = useCallback((map, latlng) => {
-    L.marker(latlng, {
-      icon: blueIcon,
-    }).addTo(map);
+  const handleFormSubmit: SubmitHandler<EventFormData> = useCallback(
+    (formData) => {
+      onSubmit?.(formData);
+    },
+    []
+  );
 
-    dispatchEventAction({ type: 'setLocation', payload: latlng });
-  }, []);
+  const handleOnClickMap = useCallback(
+    (map, latlng) => {
+      const { lat, lng } = latlng;
 
-  const handleSubmit = useCallback((event: SyntheticEvent) => {
-    event.preventDefault();
+      L.marker(latlng, {
+        icon: blueIcon,
+      }).addTo(map);
 
-    dispatchEventAction({
-      type: 'createEvent',
-      payload: (state) => {
-        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-        // @ts-ignore
-        dispatch(createEvent(state));
-      },
-    });
-
-    history.push(paths.root);
-  }, []);
+      setValue('location', { latitude: lat, longitude: lng });
+      clearErrors('location');
+    },
+    [setValue]
+  );
 
   const mapRef = useMap({
     latitude: Number(process.env.REACT_APP_MAIN_MAP_LAT),
     longitude: Number(process.env.REACT_APP_MAIN_MAP_LNG),
     zoom: Number(process.env.REACT_APP_MAIN_MAP_ZOOM),
+    markers: defaultValues
+      ? [
+          {
+            latitude: defaultValues.location.latitude,
+            longitude: defaultValues.location.longitude,
+          },
+        ]
+      : [],
     onClickMap: handleOnClickMap,
   });
 
   return (
-    <form onSubmit={handleSubmit}>
+    <form onSubmit={handleSubmit(handleFormSubmit)}>
       <div className={classes.fieldPadding}>
         <TextField
           id="name-input"
           label={t(tKeys.NAME)}
           name="name"
           autoComplete="off"
-          defaultValue={name}
-          required
+          error={!!errors.name}
+          helperText={errors.name ? t(tKeys.ERROR) : ''}
+          inputProps={{ ...register('name') }}
           fullWidth
-          onChange={(event) =>
-            dispatchEventAction({
-              type: 'setName',
-              payload: event.target.value,
-            })
-          }
         />
       </div>
       <div className={classes.fieldPadding}>
@@ -139,25 +123,19 @@ const EventForm = ({ defaultValues }: Props): ReactElement => {
           label={t(tKeys.DESCRIPTION)}
           name="description"
           autoComplete="off"
-          defaultValue={description}
-          required
+          error={!!errors.description}
+          helperText={errors.description ? t(tKeys.ERROR) : ''}
+          inputProps={{ ...register('description') }}
           fullWidth
-          onChange={(event) =>
-            dispatchEventAction({
-              type: 'setDescription',
-              payload: event.target.value,
-            })
-          }
         />
       </div>
       <div className={classes.fieldPadding}>
         <FormLabel>{t(tKeys.LOCATION)}</FormLabel>
-        <div ref={mapRef} className={classes.map}></div>
+        <div ref={mapRef} className={classes.map} />
+        {!!errors.location && <p>{t(tKeys.ERROR)}</p>}
       </div>
       <div className={classes.fieldPadding}>
-        <Button type="submit" disabled={includes(formData, null)}>
-          {t(tKeys.SAVE)}
-        </Button>
+        <Button type="submit">{t(tKeys.SAVE)}</Button>
       </div>
     </form>
   );

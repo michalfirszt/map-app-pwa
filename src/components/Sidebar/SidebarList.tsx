@@ -2,6 +2,7 @@ import { List, ListItem, ListItemIcon, ListItemText } from '@material-ui/core';
 import {
   DateRange as DateRangeIcon,
   Map as MapIcon,
+  PersonAdd as PersonAddIcon,
   Room as RoomIcon,
 } from '@material-ui/icons';
 import React, { ReactElement } from 'react';
@@ -48,6 +49,17 @@ const SidebarList = (): ReactElement => {
           <RoomIcon />
         </ListItemIcon>
         <ListItemText primary={t(tKeys.CREATE_EVENT)} />
+      </ListItem>
+      <ListItem
+        button
+        onClick={() => {
+          history.push(paths.register);
+        }}
+      >
+        <ListItemIcon>
+          <PersonAddIcon />
+        </ListItemIcon>
+        <ListItemText primary={t(tKeys.REGISTER)} />
       </ListItem>
     </List>
   );

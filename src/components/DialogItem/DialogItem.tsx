@@ -4,20 +4,30 @@ import {
   DialogActions,
   DialogContent,
 } from '@material-ui/core';
-import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
-import React, { ReactElement, ReactNode, useCallback, useState } from 'react';
+import { createStyles, makeStyles } from '@material-ui/core/styles';
+import React, { ReactNode, useCallback, useReducer } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { tKeys } from '../../constants';
 
 type Props = {
   children: ReactNode;
-  dialogContent: ReactElement;
+  dialogContent: JSX.Element;
   onClose?: () => void;
   onOpen?: () => void;
 };
 
-const useStyles = makeStyles((theme: Theme) =>
+type Actions = { type: 'setIsOpen'; payload: boolean };
+
+const reducer = (state: any, { type, payload }: Actions) => {
+  switch (type) {
+    case 'setIsOpen': {
+      return { ...state, isOpen: payload };
+    }
+  }
+};
+
+const useStyles = makeStyles(() =>
   createStyles({
     dialog: {
       width: '500px',
@@ -30,23 +40,23 @@ const DialogItem = ({
   dialogContent,
   onClose,
   onOpen,
-}: Props): ReactElement => {
+}: Props): JSX.Element => {
   const classes = useStyles();
   const { t } = useTranslation();
 
-  const [isOpen, setIsOpen] = useState<boolean>(false);
+  const [{ isOpen }, dispatch] = useReducer(reducer, { isOpen: false });
 
   const handleClickOpen = useCallback(() => {
-    setIsOpen(true);
+    dispatch({ type: 'setIsOpen', payload: true });
 
     onOpen?.();
-  }, [setIsOpen, onOpen]);
+  }, [dispatch, onOpen]);
 
   const handleClose = useCallback(() => {
-    setIsOpen(false);
+    dispatch({ type: 'setIsOpen', payload: false });
 
     onClose?.();
-  }, [setIsOpen, onClose]);
+  }, [dispatch, onClose]);
 
   return (
     <>

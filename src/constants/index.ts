@@ -1,2 +1,7 @@
 export { tKeys } from './tKeys';
-export { loadStatuses, createStatuses } from './statuses';
+export {
+  loadStatuses,
+  createStatuses,
+  deleteStatuses,
+  updateStatuses,
+} from './statuses';

@@ -16,7 +16,14 @@ export type EventEffects = {
     error: null | string;
   };
   createEventEffect: {
-    eventId: null | number;
+    status: string;
+    error: null | string;
+  };
+  updateEventEffect: {
+    status: string;
+    error: null | string;
+  };
+  deleteEventEffect: {
     status: string;
     error: null | string;
   };

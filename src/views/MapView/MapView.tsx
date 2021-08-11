@@ -1,6 +1,8 @@
 import { CircularProgress, makeStyles } from '@material-ui/core';
-import React, { ReactElement } from 'react';
+import { get, has } from 'lodash';
+import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import { useLocation } from 'react-router-dom';
 import { useMount } from 'react-use';
 
 import FullSizeBackground from '../../components/FullSizeBackground';
@@ -21,14 +23,18 @@ const useStyles = makeStyles(() => ({
 
 const { LOAD_SUCCESS } = loadStatuses;
 
-const MapView = (): ReactElement => {
+const MapView = (): JSX.Element => {
   const classes = useStyles();
   const dispatch = useDispatch();
+  const location = useLocation();
 
   const loadEventListStatus = useSelector(getLoadEventListStatus);
 
   useMount(() => {
     dispatch(loadEventList());
+    if (has(location.state, 'newEventName')) {
+      console.log(get(location.state, 'newEventName'));
+    }
   });
 
   return (
