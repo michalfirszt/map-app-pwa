@@ -27,7 +27,7 @@ describe('Sidebar elements', () => {
     const { getByTestId } = renderComponent();
 
     const sidebarList = getByTestId('sidebar-list');
-    expect(sidebarList.children).toHaveLength(3);
+    expect(sidebarList.children).toHaveLength(4);
 
     expect(sidebarList.children[0]).toHaveTextContent('Map');
     expect(sidebarList.children[1]).toHaveTextContent('Events');
