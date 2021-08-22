@@ -7,6 +7,7 @@ export const tKeys = {
   CREATE_EVENT: 'CREATE_EVENT',
   DELETE: 'DELETE',
   DESCRIPTION: 'DESCRIPTION',
+  DRAFT: 'DRAFT',
   END: 'END',
   ERROR: 'ERROR',
   EVENTS: 'EVENTS',

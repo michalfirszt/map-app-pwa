@@ -10,6 +10,7 @@ export default {
     [tKeys.CREATE_EVENT]: 'Create event',
     [tKeys.DELETE]: 'Delete',
     [tKeys.DESCRIPTION]: 'Description',
+    [tKeys.DRAFT]: 'Draft',
     [tKeys.END]: 'End',
     [tKeys.ERROR]: 'Error',
     [tKeys.EVENTS]: 'Events',

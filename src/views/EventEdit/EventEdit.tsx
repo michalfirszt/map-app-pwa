@@ -41,6 +41,7 @@ const EventEdit = (): JSX.Element => {
 
   const initialFormData: EventFormData = {
     name: event?.name,
+    draft: false,
     description: event?.description,
     startDate: null,
     endDate: null,

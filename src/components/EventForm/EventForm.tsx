@@ -1,5 +1,12 @@
 import { yupResolver } from '@hookform/resolvers/yup';
-import { Button, FormLabel, Grid, TextField } from '@material-ui/core';
+import {
+  Button,
+  FormControlLabel,
+  FormLabel,
+  Grid,
+  Switch,
+  TextField,
+} from '@material-ui/core';
 import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
 import { DatePicker } from '@material-ui/pickers';
 import * as L from 'leaflet';
@@ -14,6 +21,7 @@ import { blueIcon } from '../../hooks/useMap/icons';
 
 export type EventFormData = {
   name: string;
+  draft: boolean;
   description: string;
   startDate: Date | null;
   endDate: Date | null;
@@ -44,7 +52,12 @@ const useStyles = makeStyles((theme: Theme) =>
 
 const validationSchema = yup.object().shape({
   name: yup.string().required(),
-  description: yup.string().required(),
+  draft: yup.boolean(),
+  description: yup.string().when('draft', {
+    is: (draft: boolean) => draft,
+    then: yup.string().required(),
+    otherwise: yup.string(),
+  }),
   startDate: yup.date().required(),
   endDate: yup.date().required().min(yup.ref('startDate')),
   location: yup.object().shape({
@@ -62,17 +75,22 @@ const EventForm = ({ defaultValues, onSubmit }: Props): JSX.Element => {
     register,
     clearErrors,
     setValue,
+    watch,
     handleSubmit,
     formState: { errors },
   } = useForm<EventFormData>({
+    mode: 'onChange',
     defaultValues: defaultValues ?? {
       name: '',
+      draft: false,
       description: '',
       startDate: null,
       endDate: null,
     },
     resolver: yupResolver(validationSchema),
   });
+
+  const { draft } = watch();
 
   const handleFormSubmit: SubmitHandler<EventFormData> = useCallback(
     (formData) => {
@@ -113,7 +131,7 @@ const EventForm = ({ defaultValues, onSubmit }: Props): JSX.Element => {
   return (
     <form onSubmit={handleSubmit(handleFormSubmit)}>
       <Grid container>
-        <Grid item xs={12} className={classes.fieldRow}>
+        <Grid item xs={10} className={classes.fieldRow}>
           <TextField
             id="name-input"
             label={t(tKeys.NAME)}
@@ -123,6 +141,18 @@ const EventForm = ({ defaultValues, onSubmit }: Props): JSX.Element => {
             helperText={errors.name ? t(tKeys.ERROR) : ''}
             inputProps={register('name')}
             fullWidth
+          />
+        </Grid>
+        <Grid item xs={2}>
+          <FormControlLabel
+            label={t(tKeys.DRAFT)}
+            control={
+              <Switch
+                color="primary"
+                checked={draft}
+                onChange={() => setValue('draft', !draft)}
+              />
+            }
           />
         </Grid>
         <Grid item xs={12} className={classes.fieldRow}>
@@ -142,13 +172,14 @@ const EventForm = ({ defaultValues, onSubmit }: Props): JSX.Element => {
             control={control}
             name="startDate"
             render={({
-              field: { onChange, ref, value },
+              field: { onChange, onBlur, ref, value },
               fieldState: { error },
             }) => (
               <DatePicker
                 label={t(tKeys.START)}
                 value={value}
                 onChange={onChange}
+                onBlur={onBlur}
                 error={!!error}
                 format="dd MMMM yyyy"
                 helperText={error ? t(tKeys.ERROR) : ''}
@@ -164,13 +195,14 @@ const EventForm = ({ defaultValues, onSubmit }: Props): JSX.Element => {
             control={control}
             name="endDate"
             render={({
-              field: { onChange, ref, value },
+              field: { onChange, onBlur, ref, value },
               fieldState: { error },
             }) => (
               <DatePicker
                 label={t(tKeys.END)}
                 value={value}
                 onChange={onChange}
+                onBlur={onBlur}
                 error={!!error}
                 format="dd MMMM yyyy"
                 helperText={error ? t(tKeys.ERROR) : ''}
