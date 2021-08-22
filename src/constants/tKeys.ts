@@ -7,6 +7,7 @@ export const tKeys = {
   CREATE_EVENT: 'CREATE_EVENT',
   DELETE: 'DELETE',
   DESCRIPTION: 'DESCRIPTION',
+  END: 'END',
   ERROR: 'ERROR',
   EVENTS: 'EVENTS',
   LOCATION: 'LOCATION',
@@ -16,5 +17,6 @@ export const tKeys = {
   REGISTER: 'REGISTER',
   SAVE: 'SAVE',
   SEARCH: 'SEARCH',
+  START: 'START',
   STREET: 'STREET',
 };

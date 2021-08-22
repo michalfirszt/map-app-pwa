@@ -42,6 +42,8 @@ const EventEdit = (): JSX.Element => {
   const initialFormData: EventFormData = {
     name: event?.name,
     description: event?.description,
+    startDate: null,
+    endDate: null,
     location: {
       latitude: event?.latitude,
       longitude: event?.longitude,
